@@ -6,7 +6,7 @@
 
 - **核心框架**: Vue 3 (Script Setup) + Vite 5
 - **样式方案**: Tailwind CSS + PostCSS (自动将 px 转换为 rem，完美适配移动端)
-- **CSS 预处理**: 支持 Less
+- **CSS 预处理**: 支持 Sass (SCSS)
 - **状态管理**: Pinia + pinia-plugin-persistedstate (数据持久化)
 - **网络请求**: Axios 深度封装 (拦截器、GET/POST/PUT/PATCH/DELETE、错误处理)
 - **国际化**: Vue I18n (支持多语言切换)
