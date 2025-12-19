@@ -136,15 +136,19 @@ bus.off('event-name');
 
 ### 4. 国际化 (I18n)
 
+项目集成了 `vue-i18n` 并通过 `Pinia` (`appStore`) 实现了语言状态的持久化管理。
+
 ```javascript
 import { useI18n } from 'vue-i18n';
+import { useAppStore } from '@/stores/app';
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
+const appStore = useAppStore();
 
-// 切换语言
-locale.value = 'en'; // or 'zh-CN'
+// 切换语言 (会自动保存到本地存储并更新 i18n 实例)
+appStore.setLanguage('en'); // or 'zh'
 
-// 使用
+// 使用翻译
 console.log(t('message.welcome'));
 ```
 

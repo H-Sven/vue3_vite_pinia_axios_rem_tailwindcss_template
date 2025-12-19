@@ -3,7 +3,7 @@
     <h1 class="text-4xl font-bold mb-8">{{ $t('message.welcome') }}, {{ userStore.userInfo?.name }}</h1>
     
     <div class="space-x-4">
-      <button class="px-4 py-2 bg-green-500 text-white rounded" @click="changeLanguage('zh-CN')">中文</button>
+      <button class="px-4 py-2 bg-green-500 text-white rounded" @click="changeLanguage('zh')">中文</button>
       <button class="px-4 py-2 bg-blue-500 text-white rounded" @click="changeLanguage('en')">English</button>
     </div>
 
@@ -20,21 +20,21 @@
 </template>
 
 <script setup>
-import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
+import { useAppStore } from '@/stores/app';
 import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
+const appStore = useAppStore();
 const router = useRouter();
-const { locale } = useI18n();
 
 /**
  * 切换语言
  * @param {string} lang 语言代码
  */
 const changeLanguage = (lang) => {
-  locale.value = lang;
+  appStore.setLanguage(lang);
 };
 
 /**
