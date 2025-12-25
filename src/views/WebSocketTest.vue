@@ -61,7 +61,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onUnmounted, ref, watch } from 'vue';
 
 import { useWebSocket } from '@/hooks/useWebSocket';
@@ -69,13 +69,20 @@ import { formatDate } from '@/utils/date';
 
 const wsUrl = ref('wss://echo.websocket.org');
 const messageInput = ref('');
-const logs = ref([]);
+
+interface Log {
+  time: string;
+  content: string;
+  type: string;
+}
+
+const logs = ref<Log[]>([]);
 
 // 使用全局 Hook
 // 注意：解构出的 isConnected, message, error 是全局响应式 ref
 const { isConnected, message: lastMessage, error, sendMessage, close: wsClose } = useWebSocket();
 
-const addLog = (content, type = 'receive') => {
+const addLog = (content: string, type: string = 'receive') => {
   logs.value.push({
     time: formatDate(new Date(), 'HH:mm:ss'),
     content,

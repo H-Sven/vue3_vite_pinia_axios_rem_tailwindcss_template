@@ -2,13 +2,21 @@
  * WebSocket 封装
  */
 class Socket {
+  url: string;
+  reconnectInterval: number;
+  maxReconnectAttempts: number;
+  reconnectAttempts: number;
+  ws: WebSocket | null;
+  listeners: Map<string, ((...args: any[]) => void)[]>;
+  isConnected: boolean;
+
   /**
    * 构造函数
    * @param {string} url WebSocket地址
    * @param {number} reconnectInterval 重连间隔(ms)
    * @param {number} maxReconnectAttempts 最大重连次数
    */
-  constructor(url, reconnectInterval = 3000, maxReconnectAttempts = 5) {
+  constructor(url: string, reconnectInterval: number = 3000, maxReconnectAttempts: number = 5) {
     this.url = url;
     this.reconnectInterval = reconnectInterval;
     this.maxReconnectAttempts = maxReconnectAttempts;
@@ -36,14 +44,14 @@ class Socket {
         console.log('WebSocket Connected');
         this.isConnected = true;
         this.reconnectAttempts = 0;
-        this.emit('open');
+        this.emit('open', undefined);
       };
 
       this.ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
           this.emit('message', data);
-        } catch (e) {
+        } catch (_e) {
           this.emit('message', event.data);
         }
       };
@@ -51,7 +59,7 @@ class Socket {
       this.ws.onclose = () => {
         console.log('WebSocket Closed');
         this.isConnected = false;
-        this.emit('close');
+        this.emit('close', undefined);
         this.reconnect();
       };
 
@@ -71,7 +79,6 @@ class Socket {
    */
   reconnect() {
     if (this.isConnected) return;
-    
     setTimeout(() => {
       console.log(`WebSocket Reconnecting... Attempt ${this.reconnectAttempts + 1}`);
       this.reconnectAttempts++;
@@ -81,9 +88,9 @@ class Socket {
 
   /**
    * 发送消息
-   * @param {any} data 
+   * @param {any} data 要发送的数据
    */
-  send(data) {
+  send(data: any) {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       const message = typeof data === 'string' ? data : JSON.stringify(data);
       this.ws.send(message);
@@ -103,44 +110,45 @@ class Socket {
 
   /**
    * 监听事件
-   * @param {string} event 
-   * @param {function} callback 
+   * @param {string} event 事件名
+   * @param {function} callback 回调函数
    */
-  on(event, callback) {
+  on(event: string, callback: (...args: any[]) => void) {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, []);
     }
-    this.listeners.get(event).push(callback);
+    this.listeners.get(event)?.push(callback);
   }
 
   /**
    * 移除监听
-   * @param {string} event 
-   * @param {function} callback 
+   * @param {string} event 事件名
+   * @param {function} callback 回调函数
    */
-  off(event, callback) {
+  off(event: string, callback?: (...args: any[]) => void) {
     if (!this.listeners.has(event)) return;
-    
     if (!callback) {
       this.listeners.delete(event);
       return;
     }
 
     const callbacks = this.listeners.get(event);
-    const index = callbacks.indexOf(callback);
-    if (index !== -1) {
-      callbacks.splice(index, 1);
+    if (callbacks) {
+      const index = callbacks.indexOf(callback);
+      if (index !== -1) {
+        callbacks.splice(index, 1);
+      }
     }
   }
 
   /**
    * 触发事件
-   * @param {string} event 
-   * @param {any} data 
+   * @param {string} event 事件名
+   * @param {any} data 事件数据
    */
-  emit(event, data) {
+  emit(event: string, data: any) {
     if (this.listeners.has(event)) {
-      this.listeners.get(event).forEach(callback => callback(data));
+      this.listeners.get(event)?.forEach(callback => callback(data));
     }
   }
 }

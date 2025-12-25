@@ -1,21 +1,21 @@
-import { ref } from 'vue';
+import { type Ref,ref } from 'vue';
 
 import Socket from '@/utils/websocket';
 
 // 模块级变量，充当单例存储
-let socketInstance = null;
+let socketInstance: Socket | null = null;
 
 // 全局响应式状态，让所有使用此 hook 的组件共享状态
-const isConnected = ref(false);
-const message = ref(null);
-const error = ref(null);
+const isConnected: Ref<boolean> = ref(false);
+const message: Ref<any> = ref(null);
+const error: Ref<any> = ref(null);
 
 /**
  * 全局唯一 WebSocket Hook
  * @param {string} [url] WebSocket 服务地址
  * @returns {object} WebSocket 状态和操作方法
  */
-export function useWebSocket(url) {
+export function useWebSocket(url?: string) {
   // 如果提供了 URL，尝试初始化或切换连接
   if (url) {
     // 如果实例不存在，或者 URL 发生了变化，则重新创建
@@ -38,12 +38,12 @@ export function useWebSocket(url) {
         isConnected.value = false;
       });
 
-      socketInstance.on('error', (err) => {
+      socketInstance.on('error', (err: any) => {
         error.value = err;
         isConnected.value = false;
       });
 
-      socketInstance.on('message', (data) => {
+      socketInstance.on('message', (data: any) => {
         message.value = data;
       });
     } else if (!socketInstance.isConnected) {
@@ -53,7 +53,7 @@ export function useWebSocket(url) {
   }
 
   // 发送消息方法
-  const sendMessage = (data) => {
+  const sendMessage = (data: any) => {
     if (socketInstance) {
       socketInstance.send(data);
     } else {

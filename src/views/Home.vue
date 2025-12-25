@@ -19,7 +19,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
 
 import { useAppStore } from '@/stores/app';
@@ -33,7 +33,7 @@ const router = useRouter();
  * 切换语言
  * @param {string} lang 语言代码
  */
-const changeLanguage = (lang) => {
+const changeLanguage = (lang: string) => {
   appStore.setLanguage(lang);
 };
 

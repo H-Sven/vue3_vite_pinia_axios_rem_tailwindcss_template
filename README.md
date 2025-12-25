@@ -1,23 +1,25 @@
-# Vue 3 + Vite 企业级开发模板
+# Vue 3 + TypeScript + Vite 企业级开发模板
 
-基于 Vue 3、Vite、Tailwind CSS、Pinia、Axios 构建的现代化前端开发模板，集成了国际化、移动端适配、代码规范等企业级特性。
+基于 Vue 3、TypeScript、Vite、Tailwind CSS、Pinia、Axios 构建的现代化前端开发模板，集成了国际化、移动端适配、代码规范、Git 提交规范等企业级特性。
 
 ## ✨ 特性
 
-- **核心框架**: Vue 3 (Script Setup) + Vite 5
+- **核心框架**: Vue 3 (Script Setup) + TypeScript + Vite 5
 - **样式方案**: Tailwind CSS + PostCSS (自动将 px 转换为 rem，完美适配移动端)
 - **CSS 预处理**: 支持 Sass (SCSS)
 - **状态管理**: Pinia + pinia-plugin-persistedstate (数据持久化)
-- **网络请求**: Axios 深度封装 (拦截器、GET/POST/PUT/PATCH/DELETE、错误处理)
+- **网络请求**: Axios 深度封装 (拦截器、GET/POST/PUT/PATCH/DELETE、错误处理、类型定义)
 - **国际化**: Vue I18n (支持多语言切换)
 - **路由**: Vue Router (路由守卫配置)
 - **工具库**:
   - **Day.js**: 轻量级日期处理
   - **Mitt**: 全局事件总线 (EventBus)
   - **WebSocket**: 封装带重连机制的 WebSocket 类及全局 Hook
-- **代码规范**: ESLint + eslint-plugin-simple-import-sort (自动排序导入导出)
+- **代码规范**:
+  - **ESLint**: TypeScript + Vue 3 规则配置
+  - **Husky + lint-staged**: Git 提交前自动检查并修复代码
 - **多环境**: 支持 development, test, pre, production 多环境配置
-- **开发体验**: 配置 `@` 路径别名
+- **开发体验**: 配置 `@` 路径别名，全量 TypeScript 类型支持
 
 ## 🚀 快速开始
 
@@ -45,7 +47,17 @@ pnpm dev:test
 pnpm dev:prod
 ```
 
-### 3. 构建部署
+### 3. 代码检查与修复
+
+```bash
+# 运行 ESLint 检查
+pnpm lint
+
+# 运行类型检查
+pnpm exec vue-tsc --noEmit
+```
+
+### 4. 构建部署
 
 ```bash
 # 构建生产环境
@@ -62,32 +74,41 @@ pnpm build:test
 ├── src/
 │   ├── assets/          # 静态资源
 │   ├── components/      # 公共组件
-│   ├── hooks/           # 组合式函数 (如 useWebSocket)
+│   ├── hooks/           # 组合式函数 (如 useWebSocket.ts)
 │   ├── locales/         # 国际化语言包
-│   ├── router/          # 路由配置
-│   ├── stores/          # Pinia 状态管理
-│   ├── utils/           # 工具函数 (request, bus, websocket等)
-│   ├── views/           # 页面组件
+│   ├── router/          # 路由配置 (index.ts)
+│   ├── stores/          # Pinia 状态管理 (*.ts)
+│   ├── utils/           # 工具函数 (request.ts, bus.ts, websocket.ts等)
+│   ├── views/           # 页面组件 (*.vue)
 │   ├── App.vue          # 根组件
-│   └── main.js          # 入口文件
+│   ├── main.ts          # 入口文件
+│   └── vite-env.d.ts    # Vite 类型声明
+├── .husky/              # Git Hooks 配置
 ├── .env.*               # 环境变量文件
 ├── eslint.config.js     # ESLint 配置
 ├── postcss.config.js    # PostCSS 配置
 ├── tailwind.config.js   # Tailwind 配置
-└── vite.config.js       # Vite 配置
+├── tsconfig.json        # TypeScript 配置
+└── vite.config.ts       # Vite 配置
 ```
 
 ## 🛠 功能使用说明
 
 ### 1. 网络请求 (Axios)
 
-已在 `src/utils/request.js` 中封装，支持所有标准 HTTP 方法。
+已在 `src/utils/request.ts` 中封装，支持所有标准 HTTP 方法及类型推断。
 
-```javascript
+```typescript
 import request from '@/utils/request';
 
+// 定义响应数据接口
+interface User {
+  id: number;
+  name: string;
+}
+
 // GET
-request.get('/api/users', { id: 1 });
+request.get<User>('/api/users', { id: 1 });
 
 // POST
 request.post('/api/login', { username, password });
@@ -101,7 +122,7 @@ request.delete('/api/users/1');
 
 提供了全局单例 Hook `useWebSocket`，支持自动重连和全局状态共享。
 
-```javascript
+```typescript
 import { useWebSocket } from '@/hooks/useWebSocket';
 
 const { isConnected, message, sendMessage, connect, close } = useWebSocket('wss://your-url');
@@ -119,7 +140,7 @@ watch(message, (newMsg) => {
 
 使用 `mitt` 封装的全局事件总线。
 
-```javascript
+```typescript
 import bus from '@/utils/bus';
 
 // 监听
@@ -138,7 +159,7 @@ bus.off('event-name');
 
 项目集成了 `vue-i18n` 并通过 `Pinia` (`appStore`) 实现了语言状态的持久化管理。
 
-```javascript
+```typescript
 import { useI18n } from 'vue-i18n';
 import { useAppStore } from '@/stores/app';
 
@@ -160,11 +181,18 @@ console.log(t('message.welcome'));
 VITE_API_URL=https://api.example.com
 ```
 
-在代码中使用：
+在代码中使用 (有类型提示)：
 
-```javascript
+```typescript
 console.log(import.meta.env.VITE_API_URL);
 ```
+
+### 6. Git 提交规范 (Husky + lint-staged)
+
+项目配置了 `pre-commit` 钩子。当你执行 `git commit` 时：
+1. 会自动运行 `lint-staged`。
+2. 仅对暂存区 (staged) 的文件 (`.js`, `.ts`, `.vue` 等) 执行 `eslint --fix`。
+3. 如果 ESLint 修复失败或发现无法修复的错误，提交将被终止。
 
 ## 📄 License
 

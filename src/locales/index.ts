@@ -4,7 +4,7 @@ import en from './en';
 import zh from './zh';
 
 // 获取本地存储的语言设置
-const getLocale = () => {
+const getLocale = (): string => {
   const defaultLocale = 'zh';
   try {
     const appStore = localStorage.getItem('app-store');

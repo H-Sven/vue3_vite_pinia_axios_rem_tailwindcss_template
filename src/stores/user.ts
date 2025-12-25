@@ -1,29 +1,34 @@
 import { defineStore } from 'pinia';
 
+interface UserState {
+  token: string;
+  userInfo: any | null;
+}
+
 /**
  * 用户状态管理
  */
 export const useUserStore = defineStore('user', {
-  state: () => ({
+  state: (): UserState => ({
     token: '',
     userInfo: null,
   }),
   getters: {
-    isLoggedIn: (state) => !!state.token,
+    isLoggedIn: (state): boolean => !!state.token,
   },
   actions: {
     /**
      * 设置 token
      * @param {string} token 
      */
-    setToken(token) {
+    setToken(token: string) {
       this.token = token;
     },
     /**
      * 设置用户信息
      * @param {object} info 
      */
-    setUserInfo(info) {
+    setUserInfo(info: any) {
       this.userInfo = info;
     },
     /**

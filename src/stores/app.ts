@@ -2,8 +2,12 @@ import { defineStore } from 'pinia';
 
 import i18n from '@/locales';
 
+interface AppState {
+  language: string;
+}
+
 export const useAppStore = defineStore('app', {
-  state: () => ({
+  state: (): AppState => ({
     language: 'zh',
   }),
   actions: {
@@ -11,8 +15,9 @@ export const useAppStore = defineStore('app', {
      * 设置语言
      * @param {string} lang 语言代码
      */
-    setLanguage(lang) {
+    setLanguage(lang: string) {
       this.language = lang;
+      // @ts-ignore
       i18n.global.locale.value = lang;
       // 设置 HTML 标签的 lang 属性
       document.documentElement.lang = lang;
@@ -23,6 +28,7 @@ export const useAppStore = defineStore('app', {
      */
     initLanguage() {
       if (this.language) {
+        // @ts-ignore
         i18n.global.locale.value = this.language;
         document.documentElement.lang = this.language;
       }
@@ -30,6 +36,6 @@ export const useAppStore = defineStore('app', {
   },
   persist: {
     key: 'app-store',
-    paths: ['language'],
+    pick: ['language'],
   },
 });

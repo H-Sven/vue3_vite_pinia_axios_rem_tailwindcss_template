@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { type AxiosResponse,type InternalAxiosRequestConfig } from 'axios';
 
 // 创建 axios 实例
 const service = axios.create({
@@ -8,7 +8,7 @@ const service = axios.create({
 
 // request 拦截器
 service.interceptors.request.use(
-  config => {
+  (config: InternalAxiosRequestConfig) => {
     // 在这里可以添加 token 等
     // const token = useUserStore().token
     // if (token) {
@@ -16,7 +16,7 @@ service.interceptors.request.use(
     // }
     return config;
   },
-  error => {
+  (error: any) => {
     // 处理请求错误
     console.log(error); // for debug
     return Promise.reject(error);
@@ -25,12 +25,12 @@ service.interceptors.request.use(
 
 // response 拦截器
 service.interceptors.response.use(
-  response => {
+  (response: AxiosResponse) => {
     const res = response.data;
     // 这里可以根据后端返回的状态码做统一处理
     return res;
   },
-  error => {
+  (error: any) => {
     console.log('err' + error); // for debug
     return Promise.reject(error);
   }
@@ -41,7 +41,7 @@ service.interceptors.response.use(
  * @param {string} url 请求地址
  * @param {object} params 请求参数
  */
-export function get(url, params) {
+export function get<T = any>(url: string, params?: object): Promise<T> {
   return service.get(url, { params });
 }
 
@@ -50,7 +50,7 @@ export function get(url, params) {
  * @param {string} url 请求地址
  * @param {object} data 请求数据
  */
-export function post(url, data) {
+export function post<T = any>(url: string, data?: object): Promise<T> {
   return service.post(url, data);
 }
 
@@ -59,7 +59,7 @@ export function post(url, data) {
  * @param {string} url 请求地址
  * @param {object} data 请求数据
  */
-export function put(url, data) {
+export function put<T = any>(url: string, data?: object): Promise<T> {
   return service.put(url, data);
 }
 
@@ -68,7 +68,7 @@ export function put(url, data) {
  * @param {string} url 请求地址
  * @param {object} data 请求数据
  */
-export function patch(url, data) {
+export function patch<T = any>(url: string, data?: object): Promise<T> {
   return service.patch(url, data);
 }
 
@@ -77,7 +77,7 @@ export function patch(url, data) {
  * @param {string} url 请求地址
  * @param {object} params 请求参数
  */
-export function del(url, params) {
+export function del<T = any>(url: string, params?: object): Promise<T> {
   return service.delete(url, { params });
 }
 
