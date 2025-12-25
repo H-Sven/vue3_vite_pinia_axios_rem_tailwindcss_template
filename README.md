@@ -19,7 +19,7 @@
   - **ESLint**: TypeScript + Vue 3 规则配置
   - **Husky + lint-staged**: Git 提交前自动检查并修复代码
 - **多环境**: 支持 development, test, pre, production 多环境配置
-- **开发体验**: 配置 `@` 路径别名，全量 TypeScript 类型支持
+- **开发体验**: 配置 `@` 路径别名，全量 TypeScript 类型支持，自动导入 Vue 组件、Pinia 状态、工具函数等
 
 ## 🚀 快速开始
 
