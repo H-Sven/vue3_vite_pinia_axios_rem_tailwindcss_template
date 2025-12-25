@@ -89,7 +89,10 @@ pnpm build:test
 ├── postcss.config.js    # PostCSS 配置
 ├── tailwind.config.js   # Tailwind 配置
 ├── tsconfig.json        # TypeScript 配置
-└── vite.config.ts       # Vite 配置
+├── vite.config.ts       # Vite 配置
+├── auto-imports.d.ts    # 自动导入类型声明 (自动生成)
+├── components.d.ts      # 组件类型声明 (自动生成)
+└── .eslintrc-auto-import.json # ESLint 自动导入配置 (自动生成)
 ```
 
 ## 🛠 功能使用说明
@@ -193,6 +196,38 @@ console.log(import.meta.env.VITE_API_URL);
 1. 会自动运行 `lint-staged`。
 2. 仅对暂存区 (staged) 的文件 (`.js`, `.ts`, `.vue` 等) 执行 `eslint --fix`。
 3. 如果 ESLint 修复失败或发现无法修复的错误，提交将被终止。
+
+### 7. 自动导入 (Auto Import)
+
+项目集成了 `unplugin-auto-import` 和 `unplugin-vue-components`，为您提供极佳的开发体验。
+
+#### API 自动导入
+无需手动 `import` Vue、Vue Router、Pinia 的常用 API。
+
+```typescript
+// ❌ 以前的写法
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+
+const count = ref(0);
+const router = useRouter();
+
+// ✅ 现在的写法 (直接使用)
+const count = ref(0);
+const router = useRouter();
+```
+
+#### 组件自动导入
+在 `src/components` 目录下的组件，以及通过 Element Plus 等 UI 库引入的组件，可以直接在模板中使用，无需手动导入和注册。
+
+#### ⚠️ 常见问题
+
+如果您遇到 **ESLint 报错** (如 `ref is not defined`) 或 **缺少类型提示**：
+
+1. 请确保项目已安装依赖 (`pnpm install`)。
+2. 运行一次开发服务器 (`pnpm dev`) 或构建命令 (`pnpm build`)。
+3. 这些命令会自动更新 `auto-imports.d.ts`、`components.d.ts` 和 `.eslintrc-auto-import.json` 文件。
+4. 如果问题仍未解决，尝试重启 IDE 或 ESLint 服务。
 
 ## 📄 License
 

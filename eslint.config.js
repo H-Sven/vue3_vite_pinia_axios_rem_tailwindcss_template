@@ -1,8 +1,23 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import js from '@eslint/js';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import pluginVue from 'eslint-plugin-vue';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+let autoImportGlobals = {};
+try {
+  const data = fs.readFileSync(path.resolve(__dirname, '.eslintrc-auto-import.json'), 'utf-8');
+  autoImportGlobals = JSON.parse(data).globals;
+} catch {
+  // ignore
+}
 
 export default [
   {
@@ -28,6 +43,7 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.node,
+        ...autoImportGlobals,
       },
       parserOptions: {
         parser: tseslint.parser,
