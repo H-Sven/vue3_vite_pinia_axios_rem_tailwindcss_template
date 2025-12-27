@@ -32,7 +32,7 @@ export const useAppStore = defineStore('app', {
         i18n.global.locale.value = this.language;
         document.documentElement.lang = this.language;
       }
-    }
+    },
   },
   persist: {
     key: 'app-store',

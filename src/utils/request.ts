@@ -1,9 +1,9 @@
-import axios, { type AxiosResponse,type InternalAxiosRequestConfig } from 'axios';
+import axios, { type AxiosResponse, type InternalAxiosRequestConfig } from 'axios';
 
 // 创建 axios 实例
 const service = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '', // api base_url
-  timeout: 5000 // 请求超时时间
+  timeout: 5000, // 请求超时时间
 });
 
 // request 拦截器
@@ -20,7 +20,7 @@ service.interceptors.request.use(
     // 处理请求错误
     console.log(error); // for debug
     return Promise.reject(error);
-  }
+  },
 );
 
 // response 拦截器
@@ -33,7 +33,7 @@ service.interceptors.response.use(
   (error: any) => {
     console.log('err' + error); // for debug
     return Promise.reject(error);
-  }
+  },
 );
 
 /**

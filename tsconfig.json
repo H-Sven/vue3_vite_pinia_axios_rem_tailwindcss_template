@@ -17,5 +17,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["auto-imports.d.ts", "src/**/*"],
+  "include": ["auto-imports.d.ts", "src/**/*"]
 }

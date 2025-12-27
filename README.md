@@ -17,6 +17,7 @@
   - **WebSocket**: 封装带重连机制的 WebSocket 类及全局 Hook
 - **代码规范**:
   - **ESLint**: TypeScript + Vue 3 规则配置
+  - **Prettier**: 代码格式化工具，统一代码风格
   - **Husky + lint-staged**: Git 提交前自动检查并修复代码
 - **多环境**: 支持 development, test, pre, production 多环境配置
 - **开发体验**: 配置 `@` 路径别名，全量 TypeScript 类型支持，自动导入 Vue 组件、Pinia 状态、工具函数等
@@ -52,6 +53,9 @@ pnpm dev:prod
 ```bash
 # 运行 ESLint 检查
 pnpm lint
+
+# 运行 Prettier 格式化
+pnpm format
 
 # 运行类型检查
 pnpm exec vue-tsc --noEmit
@@ -193,15 +197,18 @@ console.log(import.meta.env.VITE_API_URL);
 ### 6. Git 提交规范 (Husky + lint-staged)
 
 项目配置了 `pre-commit` 钩子。当你执行 `git commit` 时：
+
 1. 会自动运行 `lint-staged`。
-2. 仅对暂存区 (staged) 的文件 (`.js`, `.ts`, `.vue` 等) 执行 `eslint --fix`。
-3. 如果 ESLint 修复失败或发现无法修复的错误，提交将被终止。
+2. 对暂存区的文件执行 `prettier --write` 进行格式化。
+3. 对代码文件 (`.js`, `.ts`, `.vue` 等) 执行 `eslint --fix`。
+4. 如果 ESLint 修复失败或发现无法修复的错误，提交将被终止。
 
 ### 7. 自动导入 (Auto Import)
 
 项目集成了 `unplugin-auto-import` 和 `unplugin-vue-components`，为您提供极佳的开发体验。
 
 #### API 自动导入
+
 无需手动 `import` Vue、Vue Router、Pinia 的常用 API。
 
 ```typescript
@@ -218,6 +225,7 @@ const router = useRouter();
 ```
 
 #### 组件自动导入
+
 在 `src/components` 目录下的组件，以及通过 Element Plus 等 UI 库引入的组件，可以直接在模板中使用，无需手动导入和注册。
 
 #### ⚠️ 常见问题

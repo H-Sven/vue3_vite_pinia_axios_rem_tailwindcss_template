@@ -7,4 +7,4 @@ export default {
       propList: ['*'], // 转换所有属性
     },
   },
-}
+};

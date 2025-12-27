@@ -6,6 +6,6 @@ export default {
     welcome: 'Welcome',
     username: 'Username',
     password: 'Password',
-    submit: 'Login'
-  }
-}
+    submit: 'Login',
+  },
+};

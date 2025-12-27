@@ -19,14 +19,14 @@ export const useUserStore = defineStore('user', {
   actions: {
     /**
      * 设置 token
-     * @param {string} token 
+     * @param {string} token
      */
     setToken(token: string) {
       this.token = token;
     },
     /**
      * 设置用户信息
-     * @param {object} info 
+     * @param {object} info
      */
     setUserInfo(info: any) {
       this.userInfo = info;
@@ -37,7 +37,7 @@ export const useUserStore = defineStore('user', {
     logout() {
       this.token = '';
       this.userInfo = null;
-    }
+    },
   },
   persist: {
     key: 'user-store',

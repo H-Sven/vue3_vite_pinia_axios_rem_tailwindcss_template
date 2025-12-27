@@ -1,22 +1,22 @@
 <template>
   <div class="p-8 max-w-2xl mx-auto">
     <h1 class="text-3xl font-bold mb-6">WebSocket 测试 (Global Hook)</h1>
-    
+
     <div class="bg-white p-6 rounded-lg shadow-md mb-6">
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700 mb-2">WebSocket 地址</label>
         <div class="flex gap-2">
-          <input 
-            v-model="wsUrl" 
-            type="text" 
+          <input
+            v-model="wsUrl"
+            type="text"
             class="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="wss://echo.websocket.org"
-          >
-          <button 
+          />
+          <button
             :class="[
               'px-6 py-2 text-white rounded-md transition-colors',
-              isConnected ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
-            ]" 
+              isConnected ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600',
+            ]"
             @click="toggleConnection"
           >
             {{ isConnected ? '断开' : '连接' }}
@@ -27,16 +27,16 @@
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700 mb-2">发送消息</label>
         <div class="flex gap-2">
-          <input 
-            v-model="messageInput" 
+          <input
+            v-model="messageInput"
             type="text"
-            class="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+            class="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="输入消息..."
             :disabled="!isConnected"
             @keyup.enter="handleSendMessage"
-          >
-          <button 
-            class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed" 
+          />
+          <button
+            class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
             :disabled="!isConnected"
             @click="handleSendMessage"
           >
@@ -49,14 +49,22 @@
     <div class="bg-gray-900 text-green-400 p-4 rounded-lg h-96 overflow-y-auto font-mono text-sm">
       <div v-for="(log, index) in logs" :key="index" class="mb-1">
         <span class="text-gray-500">[{{ log.time }}]</span>
-        <span :class="log.type === 'send' ? 'text-blue-400' : log.type === 'error' ? 'text-red-400' : 'text-green-400'">
+        <span
+          :class="
+            log.type === 'send'
+              ? 'text-blue-400'
+              : log.type === 'error'
+                ? 'text-red-400'
+                : 'text-green-400'
+          "
+        >
           {{ log.type === 'send' ? '→' : '←' }} {{ log.content }}
         </span>
       </div>
     </div>
-    
+
     <div class="mt-6 text-center">
-        <router-link to="/" class="text-blue-600 hover:underline">返回主页</router-link>
+      <router-link to="/" class="text-blue-600 hover:underline">返回主页</router-link>
     </div>
   </div>
 </template>
@@ -86,7 +94,7 @@ const addLog = (content: string, type: string = 'receive') => {
   logs.value.push({
     time: formatDate(new Date(), 'HH:mm:ss'),
     content,
-    type
+    type,
   });
 };
 
@@ -125,7 +133,7 @@ const toggleConnection = () => {
 
 const handleSendMessage = () => {
   if (!messageInput.value || !isConnected.value) return;
-  
+
   sendMessage(messageInput.value);
   addLog(`发送消息: ${messageInput.value}`, 'send');
   messageInput.value = '';

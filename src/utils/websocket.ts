@@ -67,7 +67,6 @@ class Socket {
         console.error('WebSocket Error:', error);
         this.emit('error', error);
       };
-
     } catch (error) {
       console.error('WebSocket Connection Failed:', error);
       this.reconnect();
@@ -148,7 +147,7 @@ class Socket {
    */
   emit(event: string, data: any) {
     if (this.listeners.has(event)) {
-      this.listeners.get(event)?.forEach(callback => callback(data));
+      this.listeners.get(event)?.forEach((callback) => callback(data));
     }
   }
 }

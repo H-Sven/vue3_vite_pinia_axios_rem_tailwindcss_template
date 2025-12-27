@@ -6,6 +6,6 @@ export default {
     welcome: '欢迎',
     username: '用户名',
     password: '密码',
-    submit: '登录'
-  }
-}
+    submit: '登录',
+  },
+};

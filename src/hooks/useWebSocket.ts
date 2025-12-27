@@ -1,4 +1,4 @@
-import { type Ref,ref } from 'vue';
+import { type Ref, ref } from 'vue';
 
 import Socket from '@/utils/websocket';
 
@@ -82,6 +82,6 @@ export function useWebSocket(url?: string) {
     error,
     sendMessage,
     connect,
-    close
+    close,
   };
 }
